@@ -1,0 +1,41 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.11.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'pl.patrykbartnicki'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	compileOnly 'org.projectlombok:lombok'
+//	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	implementation group: 'io.r2dbc', name: 'r2dbc-h2', version: '0.8.4.RELEASE'
+
+//	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-r2dbc
+//	implementation group: 'org.springframework.data', name: 'spring-data-r2dbc', version: '1.2.0-M1'
+
+	testImplementation 'io.projectreactor:reactor-test'
+}
+
+test {
+	useJUnitPlatform()
+}
