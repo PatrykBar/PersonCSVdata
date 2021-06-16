@@ -18,10 +18,6 @@ public class PersonServiceImpl implements PersonService{
 
     private PersonRepository personRepository;
 
-    public PersonServiceImpl(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
-
     @Override
     public Mono<Long> howManyUsers() {
         return personRepository.count();

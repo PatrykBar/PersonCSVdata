@@ -1,6 +1,7 @@
 package pl.patrykbartnicki.PersonReadData.fileControllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -12,21 +13,23 @@ import reactor.core.publisher.Flux;
 public class DatabaseFiller implements ApplicationListener<ContextRefreshedEvent> {
 
     private CSV_reader csv_reader = new CSV_reader();
+    @Autowired
     private PersonRepository personRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        try{
-            log.info("Data Loading...");
 
-            personRepository.deleteAll().
-                    thenMany(Flux.just(csv_reader.getPeopleList()).
-                            flatMap(personRepository::saveAll)).
-                    subscribe(System.out::println);
+        log.info("Data Loading...");
+        addPeopleFromFile();
+        log.debug("Data loaded");
 
-            log.debug("Data loaded");
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+    }
+
+    private void addPeopleFromFile(){
+
+        personRepository.deleteAll().
+                thenMany(Flux.just(csv_reader.getPeopleList())).
+                flatMap(personRepository::saveAll).
+                subscribe(System.out::println);
     }
 }

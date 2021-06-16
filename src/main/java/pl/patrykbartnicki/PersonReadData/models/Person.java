@@ -1,30 +1,24 @@
 package pl.patrykbartnicki.PersonReadData.models;
 
-import com.sun.istack.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "user")
+@Table("Person")
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private String name;
-    @NotNull
     private String surname;
-    @NotNull
     private String dateOfBirth;
 
-    @Column(unique = true)
     private int phoneNumber;
 
     @Override
