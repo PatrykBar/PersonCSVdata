@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class Person {
 
     private String name;
     private String surname;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
 
     private int phoneNumber;
 

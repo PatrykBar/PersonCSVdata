@@ -1,21 +1,19 @@
 package pl.patrykbartnicki.PersonReadData.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.patrykbartnicki.PersonReadData.fileControllers.CSV_reader;
 import pl.patrykbartnicki.PersonReadData.models.Person;
 import pl.patrykbartnicki.PersonReadData.repositories.PersonRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService{
 
+    @Autowired
     private PersonRepository personRepository;
 
     @Override
@@ -25,15 +23,11 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     public Flux<Person> peopleSortedByAge() {
-        List<Person> sortedPeople = new ArrayList<>();
-        sortedPeople.addAll((Collection<? extends Person>) personRepository.findAll());
-
-        return null;
+        return personRepository.findAllSortedByAge();
     }
 
     @Override
     public Mono<Person> theOldestPerson() {
-
-        return null;
+        return personRepository.findTheOldestPerson();
     }
 }

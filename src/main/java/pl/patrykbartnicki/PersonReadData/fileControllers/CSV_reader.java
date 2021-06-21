@@ -1,11 +1,15 @@
 package pl.patrykbartnicki.PersonReadData.fileControllers;
 
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.patrykbartnicki.PersonReadData.models.Person;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,12 +33,14 @@ public class CSV_reader {
         return peopleList;
     }
 
+    @SneakyThrows
     private void readCSV_File(){
         try{
             FileInputStream fileInputStream = new FileInputStream(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
+            bufferedReader.readLine();
             while ((line = bufferedReader.readLine()) != null){
                 String[] peopleData = line.split(splitBy);
                 Person person = new Person();
@@ -42,18 +48,17 @@ public class CSV_reader {
 //                    System.out.println(new String((peopleData[0] + " " + peopleData[1] + " " + peopleData[2]).getBytes(), StandardCharsets.UTF_8));
                     person.setName(checkString(peopleData[0]));// add pattern for name and surname to estimate correct value
                     person.setSurname(checkString(peopleData[1]));
-                    person.setDateOfBirth(peopleData[2]);
+                    person.setDateOfBirth(LocalDate.parse((changingDateFormat(peopleData[2]))));
                     peopleList.add(person);
                 }else if (peopleData.length==4){
 //                    System.out.println(new String((peopleData[0] + " " + peopleData[1] + " " + peopleData[2] + " " + peopleData[3]).getBytes(), StandardCharsets.UTF_8));
                     person.setName(checkString(peopleData[0]));
                     person.setSurname(checkString(peopleData[1]));
-                    person.setDateOfBirth(peopleData[2]);
+                    person.setDateOfBirth(LocalDate.parse((changingDateFormat(peopleData[2]))));
                     person.setPhoneNumber(checkNumber(peopleData[3])); // add pattern for 9 numbers
                     peopleList.add(person);
                 }
             }
-            peopleList.remove(0);
 
 //            peopleList.forEach(x-> System.out.println(new String(x.toString().getBytes(), StandardCharsets.UTF_8)));
 
@@ -102,6 +107,14 @@ public class CSV_reader {
         }
 
         return correctNumber;
+    }
+
+    private String changingDateFormat(String oldDate){
+        String newDate="";
+
+        newDate = oldDate.substring(6) + "-" + oldDate.substring(3,5) + "-" + oldDate.substring(0,2);
+
+        return newDate;
     }
 
 }
